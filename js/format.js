@@ -82,6 +82,10 @@ function toggleOrderedList(editor) {
   _toggleLine(cm, "ordered-list");
 }
 
+function toggleLatex(editor) {
+  _toggleLine(cm, "latex");
+}
+
 function _toggleLine(cm, name) {
   if(/editor-preview-active/.test(cm.getWrapperElement().lastChild.className))
   return;
@@ -94,10 +98,17 @@ function _toggleLine(cm, name) {
     "unordered-list": /^(\s*)(\*|\-|\+)\s+/,
     "ordered-list": /^(\s*)\d+\.\s+/
   };
-  var map = {
+  var prefix = {
     "quote": "> ",
     "unordered-list": "* ",
-    "ordered-list": "1. "
+    "ordered-list": "1. ",
+    "latex": "$"
+  };
+  var postfix = {
+    "quote": "",
+    "unordered-list": "",
+    "ordered-list": "",
+    "latex": "$"
   };
   for(var i = startPoint.line; i <= endPoint.line; i++) {
     (function(i) {
@@ -105,7 +116,7 @@ function _toggleLine(cm, name) {
       if(stat[name]) {
         text = text.replace(repl[name], "$1");
       } else {
-        text = map[name] + text;
+        text = prefix[name] + text + postfix[name];
       }
       cm.replaceRange(text, {
         line: i,
