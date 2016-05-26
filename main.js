@@ -24,7 +24,7 @@ function createWindow () {
   mainWindow.loadURL(mainPage);
 
   // Open the DevTools.
-  //mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function() {
@@ -39,7 +39,10 @@ function createWindow () {
     {
       label: "File",
       submenu: [
-        {label: "Quit", accelerator: "Command+Q", click: app.quit},
+        {label: "New", accelerator: "CmdOrCtrl+N", click: function() {
+          var focusedWindow = BrowserWindow.getFocusedWindow();
+          focusedWindow.webContents.send('file-new');
+        }},
         {label: "Open", accelerator: "CmdOrCtrl+O", click: function() {
           var focusedWindow = BrowserWindow.getFocusedWindow();
           focusedWindow.webContents.send('file-open');
@@ -47,7 +50,12 @@ function createWindow () {
         {label: "Save", accelerator: "CmdOrCtrl+S", click: function() {
           var focusedWindow = BrowserWindow.getFocusedWindow();
           focusedWindow.webContents.send('file-save');
-        }}
+        }},
+        {label: "Save As", accelerator: "CmdOrCtrl+Shift+S", click: function() {
+          var focusedWindow = BrowserWindow.getFocusedWindow();
+          focusedWindow.webContents.send('file-save-as');
+        }},
+        {label: "Quit", accelerator: "Command+Q", click: app.quit}
       ]
     },
     {
